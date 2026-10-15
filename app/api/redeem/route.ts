@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { normalizeLicenseCode, parseLicenseCodes } from "@/lib/license-codes";
+import { getValidLicenseCodes, normalizeLicenseCode } from "@/lib/license-codes";
 
 export const runtime = "nodejs";
 
@@ -22,10 +22,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, reason: "empty" as const }, { status: 400 });
   }
 
-  const validCodes = parseLicenseCodes(process.env.LICENSE_CODES);
+  const validCodes = getValidLicenseCodes();
 
   if (validCodes.size === 0) {
-    console.error("LICENSE_CODES is empty. Add codes to .env.local or Vercel env.");
+    console.error("No license codes configured. Set LICENSE_SECRET (recommended) or LICENSE_CODES.");
     return NextResponse.json({ ok: false, reason: "unconfigured" as const }, { status: 503 });
   }
 
@@ -33,6 +33,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, reason: "invalid" as const }, { status: 401 });
   }
 
-  // Reusable pool: any listed code unlocks; no usage ledger.
+  // Reusable pool: any listed/derived code unlocks; no usage ledger.
   return NextResponse.json({ ok: true, code });
 }

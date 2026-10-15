@@ -7,3 +7,5 @@ tsconfig.tsbuildinfo
 .env.local
 .env*.local
 license-codes.txt
+license-codes-for-vercel.txt
+vercel-env-paste.txt
