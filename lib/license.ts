@@ -6,7 +6,7 @@
 const STORAGE_UNLOCK = "flavor-persona-unlocked";
 const STORAGE_CODE = "flavor-persona-unlocked-code";
 
-export type LicenseFailReason = "empty" | "invalid" | "network";
+export type LicenseFailReason = "empty" | "invalid" | "network" | "unconfigured";
 
 export type LicenseResult =
   | { ok: true; code: string }
@@ -53,7 +53,11 @@ export async function redeemLicenseCode(raw: string): Promise<LicenseResult> {
     };
 
     if (!response.ok || !data.ok || !data.code) {
-      return { ok: false, reason: data.reason === "empty" ? "empty" : "invalid" };
+      if (data.reason === "empty") return { ok: false, reason: "empty" };
+      if (data.reason === "unconfigured" || response.status === 503) {
+        return { ok: false, reason: "unconfigured" };
+      }
+      return { ok: false, reason: "invalid" };
     }
 
     persistUnlock(data.code);

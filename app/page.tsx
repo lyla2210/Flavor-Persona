@@ -57,6 +57,7 @@ const uiCopy = {
     licenseEmpty: "请先输入授权码",
     licenseInvalid: "授权码无效，请核对后重试",
     licenseNetwork: "网络异常，请稍后重试",
+    licenseUnconfigured: "服务端未配置授权码，请在 Vercel 添加 LICENSE_CODES 后重新部署",
     licenseChecking: "校验中…",
     soundOn: "音效开",
     soundOff: "音效关",
@@ -88,6 +89,7 @@ const uiCopy = {
     licenseEmpty: "Please enter an access code",
     licenseInvalid: "Invalid code — please check and try again",
     licenseNetwork: "Network error — please try again",
+    licenseUnconfigured: "Server has no LICENSE_CODES — add it in Vercel and redeploy",
     licenseChecking: "Checking…",
     soundOn: "Sound on",
     soundOff: "Sound off",
@@ -162,9 +164,10 @@ export default function HomePage() {
     if (!next) sounds.play("soft");
   };
 
-  const licenseErrorMessage = (reason: "empty" | "invalid" | "network") => {
+  const licenseErrorMessage = (reason: "empty" | "invalid" | "network" | "unconfigured") => {
     if (reason === "empty") return copy.licenseEmpty;
     if (reason === "network") return copy.licenseNetwork;
+    if (reason === "unconfigured") return copy.licenseUnconfigured;
     return copy.licenseInvalid;
   };
 

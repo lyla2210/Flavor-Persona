@@ -26,7 +26,7 @@ export async function POST(request: Request) {
 
   if (validCodes.size === 0) {
     console.error("LICENSE_CODES is empty. Add codes to .env.local or Vercel env.");
-    return NextResponse.json({ ok: false, reason: "invalid" as const }, { status: 503 });
+    return NextResponse.json({ ok: false, reason: "unconfigured" as const }, { status: 503 });
   }
 
   if (!validCodes.has(code)) {
